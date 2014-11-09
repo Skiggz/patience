@@ -9,10 +9,6 @@
         };
     };
 
-    if (void(0) === jQuery && console && console.log) {
-        console.log('jQuery was not found, some features will be restricted. If you are using jQuery, load patience.js after jQuery.');
-    }
-
     /*
         Decent visibility check using jQuery
     */
@@ -25,17 +21,27 @@
             item.width() === 0
         );
     }
+
     if (void(0) === window) {
         throw new PatienceError('window is not defined. Are you using Patience in a web browser? Currently that is all it supports.');
     }
+
     if (window.Patience) {
         throw new PatienceError('Patience is already defined. :(');
     }
+
     window.Patience = new (function() {
 
         var self = this;
         this.DEFAULT_TIMEOUT = 5000;
         this.DEFAULT_INTERVAL = 500;
+        this.has$ = false;
+
+        if (void(0) === window.jQuery && window.console && window.console.log) {
+            console.log('jQuery was not found, some features will be restricted. If you are using jQuery, load patience.js after jQuery.');
+        } else {
+            self.has$ = true;
+        }
 
         /*
             Ironically, Patience isn't very patient. 
@@ -144,8 +150,8 @@
         };
 
         this.waitForSelector = function(selector, timeout) {
-            if (void(0) === jQuery) {
-                throw new PatienceError("waitForSelector requires jQuery!");
+            if (!self.has$) {
+                throw new PatienceError("Patience.waitForSelector requires jQuery");
             }
             if (typeof selector != 'string') {
                 throw new PatienceError("waitForSelector() requires a selector");
