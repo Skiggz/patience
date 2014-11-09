@@ -9,7 +9,7 @@ Patience was originally created as a test helper, but can surely be used for oth
 
 Patience has many similarities to some of the helper methods from [Casper JS](http://casperjs.org/) and uses native Promises (in browser land) that makes the syntax very easy to read and use. If you are not familiar with browser Promises, check out [mozilla's explanation here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
-Last but not least, some more of the syntax was influenced by Pivotal's test framework [Jasmine JS](http://jasmine.github.io/)
+Last but not least, some of the syntax was influenced by Pivotal's test framework [Jasmine JS](http://jasmine.github.io/)
 
 #Usage
 ###Core Functionality
@@ -63,6 +63,9 @@ If you want to use the built-ins, include jQuery first, then patience. Otherwise
 ```html
 <script type="text/javascript" src="patience.js"></script>
 ```
+
+#Tests
+Tests are all written using jasmine. To run them, navigate your browser to both `test/patience.html` and `test/patience-jquery.html`.
 
 #Contact
 
