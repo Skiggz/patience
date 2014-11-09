@@ -13,12 +13,12 @@
         Decent visibility check using jQuery
     */
     function hidden(item) {
+        var sizeless = item.css('overflow') === 'hidden' && (item.height() === 0 || item.width() === 0);
         return (
             item.css('display') === 'none' ||
             item.css('visibility') === 'hidden' ||
             item.css('opacity') == 0 ||
-            item.height() === 0 ||
-            item.width() === 0
+            sizeless
         );
     }
 
