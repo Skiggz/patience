@@ -51,6 +51,9 @@ Patience will time out a call based on the default timeout, or the timeout speci
 * `Patience.setDefaultTimeout(10000) // 10 seconds`
 * `Patience.setDefaultInterval(100) // 10 times a second`
 
+#Demo
+
+Check out [Patience in action!](http://skiggz.github.io/patience/)
 
 #jQuery
 Currently Patience requires jQuery for use of the built in helpers. However, Patience will still work without it. I may move this complely away from jQuery in the future, but do not have plans to as of now. **The core funcitonality does not require jQuery**.
