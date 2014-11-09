@@ -184,7 +184,7 @@
                     present: function() {
                         var fn = function() {
                             var item = $(selector);
-                            return !!item;
+                            return !!item && item.length > 0;
                         };
                         var w = new Waiter(fn, true, timeout);
                         self.addWaiter(w);
