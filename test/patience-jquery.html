@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Patience Tests</title>
+		<link rel="stylesheet" type="text/css" href="../resources/bootstrap.min.css"> 
+		<link rel="stylesheet" type="text/css" href="../resources/jasmine.css"> 
+		<script type="text/javascript" src="../resources/jquery.2.1.1.min.js"></script>
+		<script type="text/javascript" src="../patience.js"></script>
+		<script type="text/javascript" src="../resources/jasmine.js"></script>
+		<script type="text/javascript" src="../resources/jasmine-html.js"></script>
+		<script type="text/javascript" src="../resources/boot.js"></script>
+		<style type="text/css">
+			#visible-test {
+				overflow: hidden;
+			}
+		</style>
+		<script type="text/javascript">
+			/*
+				These tests are all done with jQuery present
+				patience.html tests core functionality
+				without jQuery
+			*/
+			describe('jQuery Functionality', function() {
+				
+				it('Should recognize when a test element becomes hidden', function(done) {
+					expect($('#visible-test').css('display')).toBe('block');
+					Patience.waitForSelector('#visible-test').toBe.hidden().then(function() {
+						expect($('#visible-test').css('display')).toBe('none');
+						done();	
+					}, this.fail);
+					setTimeout(function() {
+						$('#visible-test').hide();
+					}, 2000);
+				}.bind(this));
+
+				it('Should recognize when a test element becomes visible', function(done) {
+					expect($('#visible-test').css('display')).toBe('none');
+					Patience.waitForSelector('#visible-test').toBe.visible().then(function() {
+						expect($('#visible-test').css('display')).toBe('block');
+						done();	
+					}, this.fail);
+					setTimeout(function() {
+						$('#visible-test').show();
+					}, 2000);
+				}.bind(this));
+
+				it('Should recognize when a test element becomes sizeless', function(done) {
+					expect($('#visible-test').width()).not.toBe(0);
+					expect($('#visible-test').css('overflow')).toBe('hidden');
+					Patience.waitForSelector('#visible-test').toBe.hidden().then(function() {
+						expect($('#visible-test').width()).toBe(0);
+						done();	
+					}, this.fail);
+					setTimeout(function() {
+						$('#visible-test').width(0);
+					}, 2000);
+				}.bind(this));
+
+				it('Should recognize when a test element becomes present', function(done) {
+					expect($('#test-item').length).toBe(0);
+					Patience.waitForSelector('#test-item').toBe.present().then(function() {
+						expect($('#test-item').length).toBe(1);
+						done();	
+					}, this.fail);
+					setTimeout(function() {
+						var testItem = $('<div>');
+						testItem.attr('id', 'test-item');
+						$('#test').append(testItem);
+					}, 2000);
+				}.bind(this));
+
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="https://github.com/Skiggz/patience" target="_blank">Patience</a>
+				</div>
+			</div>
+		</nav>
+		<section id="test" class="container">
+			<div id="visible-test">I am a test element that is visible (for now)</div>
+		</section>
+	</body>
+</html>

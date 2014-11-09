@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Patience Tests</title>
+		<link rel="stylesheet" type="text/css" href="../resources/bootstrap.min.css"> 
+		<link rel="stylesheet" type="text/css" href="../resources/jasmine.css"> 
+		<script type="text/javascript" src="../patience.js"></script>
+		<script type="text/javascript" src="../resources/jasmine.js"></script>
+		<script type="text/javascript" src="../resources/jasmine-html.js"></script>
+		<script type="text/javascript" src="../resources/boot.js"></script>
+		<script type="text/javascript">
+			/*
+				These tests are all done without jQuery present
+				patience-jquery.html tests jQuery functionality
+			*/
+			describe('Core Functionality', function() {
+
+				it('Should check that Patience defaults have been set', function() {
+					expect(Patience.DEFAULT_TIMEOUT).toBe(5000);
+					expect(Patience.DEFAULT_INTERVAL).toBe(500);
+				});
+				
+				it('Should fail when trying to use jQuery selector methods without jQuery', function() {
+					try {
+						Patience.waitForSelector('#foobar').toBe.hidden().then(this.fail, this.fail);
+						fail('Patience should throw an error');
+					} catch (e) {
+						expect(e.toString()).toBe('[ PatienceError: Patience.waitForSelector requires jQuery ]');
+					}
+				}.bind(this));
+
+				it('Should notice when function foo returns true', function(done) {
+					var bar = false;
+					var foo = function() {
+						return bar;
+					}
+					// Set bar to true after 2 seconds
+					setTimeout(function() { bar = true; }, 2000);
+					// Wait for bar to turn to true
+					expect(foo()).toBe(false);
+					Patience.waitFor(foo).toBe(true).then(function() {
+						expect(bar).toBe(true);
+						done();
+					},this.fail);
+					// Jasmine will time out or fail
+				}.bind(this));
+
+				it('Should call reject function on Promise when condition times out', function(done) {
+					var foo = function() { return 5; }
+					// Time out or fail by not timing out
+					// Override timeout to 3 seconds since jasmine timeout is 5
+					// Also tests timeout overriding
+					expect(foo()).toBe(5);
+					Patience.waitFor(foo, 3000).toBe(100).then(function() {
+						this.fail('Timeout should fail after 3 seconds');
+					}, function() {
+						expect(foo()).toBe(5);
+						done();
+					})
+				}.bind(this));
+
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="https://github.com/Skiggz/patience" target="_blank">Patience</a>
+				</div>
+			</div>
+		</nav>
+	</body>
+</html>
