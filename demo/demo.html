@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Patience Demo</title>
+		<link rel="stylesheet" type="text/css" href="../resources/bootstrap.min.css"> 
+		<link rel="stylesheet" type="text/css" href="../resources/pretty.css"> 
+		<script type="text/javascript" src="../resources/jquery.2.1.1.min.js"></script>
+		<script type="text/javascript" src="../patience.js"></script>
+		<script type="text/javascript" src="../resources/pretty.js"></script>
+		<style type="text/css">
+			.demo-block {
+				height: 300px;
+				width: 300px;
+				border: 1px solid rgb(100,100,100);
+				display: inline-block;
+			}
+			.log-container {
+				display: inline-block;
+				vertical-align: top;
+			}
+			footer {
+				margin-bottom: 100px;
+			}
+		</style>
+		<script type="text/javascript">
+			// Not intended to be pretty, sets 'code' to the actual code for
+			// display purposes (to avoid copy and pasting or forgetfulness :P)
+			var code = (function() {
+				// Conditional methods
+				function isRed() {
+					return $('.demo-block').css('background-color') === 'rgb(240, 20, 20)';
+				}
+				function isBlue() {
+					return $('.demo-block').css('background-color') === 'rgb(20, 20, 240)';
+				}
+				function isGreen() {
+					return $('.demo-block').css('background-color') === 'rgb(20, 240, 20)';
+				}
+
+				// Basic fail method when the blocks do not change
+				var failMethod = function() {
+					alert('The block did not change colors in time :(');	
+				};
+
+				// Patience usage
+				// Wait for the block to turn red, then wait for it to turn blue
+				// Log both events in our simple list just for kicks
+				Patience.waitFor(isRed).toBe(true).then(function() {
+					$('.log').append($(
+						'<li>The block is red!</li>'
+					));
+				}, failMethod);
+
+				// Timeout is 5 seconds, we know it will take 6, so let's wait up to 7
+				Patience.waitFor(isBlue, 7000).toBe(true).then(function() {
+					$('.log').append($(
+						'<li>The block is blue!</li>'
+					));
+				}, failMethod);
+
+				// We know it will not turn green, so let's test out the failure method
+				Patience.waitFor(isGreen, 10000).toBe(true).then(function() {
+					$('.log').append($(
+						'<li>The block is green! (Uh...this was not supposed to happen)</li>'
+					));
+				}, function() {
+					$('.log').append($(
+						'<li>The block never turned green (expected).</li>'
+					));
+				});
+
+				// Automating some 'stuff' to happen
+				setTimeout(function() {
+					$('.demo-block').css('background-color', 'rgb(240,20,20)');
+					setTimeout(function() {
+						$('.demo-block').css('background-color', 'rgb(20,20,240)');
+					}, 3000);
+				}, 3000);
+			});
+			var codeDisplay = code.toString()
+				.replace(/\n\t{3}/g, '\n')
+				.replace(/\t/g, '   ');
+			$(document).ready(function() {
+				$('#code-display').text(codeDisplay);
+				prettyPrint();
+				code();
+			});
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="https://github.com/Skiggz/patience" target="_blank">Patience</a>
+				</div>
+			</div>
+		</nav>
+		<section class="container">
+			<section class="container">
+				<h1>Patience Demo</h1>
+				<blockquote>
+					<p>This block will eventually turn red, and then blue. We'll use patience to log this</p>
+				</blockquote>
+				<div class="demo-block">
+
+				</div>
+				<div class="log-container">
+					<ul class="log"></ul>
+				</div>
+			</section>
+		</section>
+		<section class="container">
+				<h1>The Code</h1>
+				<p>This example uses jQuery for simplicity, but it's actually not required. The demo uses the core functinoality of patience.js only.<p>
+				<article class="container">
+					<pre id="code-display" class="prettyprint">
+					</pre>
+				</article>
+			</section>
+		<footer class="container">
+				<h3>What are you waiting for?</h3>
+				<ul>
+					<li>Patience is very lightweight and easy to use!</li>
+					<li><a href="https://github.com/Skiggz/patience" target="_blank">Check out the documentation</a> or get the source!</li>
+					<li>If you find any issues, please <a href="https://github.com/Skiggz/patience/issues" target="_blank">report them</a>.</li>
+					<li>If you have any suggestions, please <a href="https://github.com/Skiggz/patience/issues" target="_blank">report an enhancement</a> or <a href="https://github.com/Skiggz/patience/pulls" target="_blank">create a pull request!</a></li>
+				</ul>
+			</footer>
+	</body>
+</html>
